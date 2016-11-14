@@ -1,0 +1,1 @@
+require('javascripts/app');
