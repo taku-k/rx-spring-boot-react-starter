@@ -5,11 +5,11 @@ buildscript {
         classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:3.0.3'
         classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+        classpath "com.moowork.gradle:gradle-node-plugin:0.13"
     }
 }
 
 subprojects {
-    apply plugin: 'java'
     apply plugin: 'idea'
     version = '0.1'
 
