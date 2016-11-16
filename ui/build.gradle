@@ -1,9 +1,5 @@
 apply plugin: 'com.moowork.node'
 
-task devServerStart(type: NpmTask) {
-  args = ['run', 'start']
-}
-
 task assetsBuild(type: NpmTask) {
   args = ['run', 'build']
 }

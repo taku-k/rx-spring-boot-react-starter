@@ -14,16 +14,25 @@ apply plugin: 'java'
 apply plugin: 'spring-boot'
 
 jar {
-    baseName = 'server'
+    baseName = 'reactor-spring-boot-react-server'
     version = '0.0.1-SNAPSHOT'
+    from('../ui/build') {
+        into 'static'
+    }
 }
+
+task uiBuild(dependsOn: ':ui:assetsBuild')
+task serverBuild(dependsOn: assemble) {
+    mustRunAfter uiBuild
+}
+task allAssemble(dependsOn: [serverBuild, uiBuild])
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
 }
-
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'

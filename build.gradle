@@ -2,9 +2,6 @@ buildscript {
     repositories { jcenter() }
 
     dependencies {
-        classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:3.0.3'
-        classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
         classpath "com.moowork.gradle:gradle-node-plugin:0.13"
     }
 }
