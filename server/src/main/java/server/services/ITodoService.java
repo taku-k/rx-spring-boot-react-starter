@@ -1,14 +1,14 @@
 package server.services;
 
-import reactor.core.publisher.Flux;
+import rx.Observable;
 import server.domain.Todo;
 
 import java.util.List;
 
 public interface ITodoService {
-    Flux<List<Todo>> getTodoList();
+    Observable<List<Todo>> getTodoList();
 
-    Flux<Todo> addTodo(String text);
+    Observable<Todo> addTodo(String text);
 
-    Flux<Todo> deleteTodoById(Long todoId);
+    Observable<Todo> deleteTodoById(Long todoId);
 }

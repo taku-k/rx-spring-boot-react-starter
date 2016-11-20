@@ -1,12 +1,13 @@
-# Reactor + Spring Boot & React + Redux-Observable Starter Project
+# RxJava + Spring Boot & RxJS(Redux-Observable) + React Starter Project
 
-A starter using Spring-Boot and Reactor for backend, and using React, Redux, ES6 + JSX via Babel, and RxJS + Redux-Observable for frontend.
+A starter using Spring-Boot and RxJava for backend, and using React, Redux, ES6 + JSX via Babel, and RxJS + Redux-Observable for frontend.
 React structure follows [the Ducks pattern](https://github.com/erikras/ducks-modular-redux) — approach when each module's entry file (`feature-name.js`) contains all of its related constants, actions/action creators, selectors, its reducer and its epic which is the core primitive of redux-observable.
 
 This starter is powered by the following technology stack:
 
 - [x] [Spring Boot](https://projects.spring.io/spring-boot/)
 - [x] [Reactor](https://projectreactor.io/)
+- [x] [RxJava](https://github.com/ReactiveX/RxJava)
 - [x] [React](https://facebook.github.io/react/) and [JSX](https://facebook.github.io/jsx/)
 - [x] [Redux](http://redux.js.org/)
 - [x] [RxJS](http://reactivex.io/rxjs/)

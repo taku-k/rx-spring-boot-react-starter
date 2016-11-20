@@ -38,7 +38,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.projectlombok:lombok:1.16.10'
     compile 'com.google.guava:guava:20.0'
-    compile 'io.projectreactor:reactor-core:3.0.3.RELEASE'
+    compile 'io.reactivex:rxjava:1.2.2'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }

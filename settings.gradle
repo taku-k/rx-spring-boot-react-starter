@@ -1,4 +1,4 @@
-rootProject.name='reactor-spring-boot-react-starter'
+rootProject.name='rx-spring-boot-react-starter'
 
 include 'ui'
 include 'server'

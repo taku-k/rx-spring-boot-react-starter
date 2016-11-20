@@ -1,6 +1,6 @@
 package server.services;
 
-import reactor.core.publisher.Flux;
+import rx.Observable;
 import server.domain.Todo;
 
 import java.util.Arrays;
@@ -12,31 +12,26 @@ public class TodoService implements ITodoService {
     private final ConcurrentHashMap<Long, Todo> todoById = new ConcurrentHashMap<>();
     private final AtomicLong lastId = new AtomicLong(0);
 
-    public Flux<List<Todo>> getTodoList() {
-        return Flux.create(s -> {
-            s.next(Arrays.asList(todoById.values().toArray(new Todo[]{})));
-            s.complete();
-        });
+    public Observable<List<Todo>> getTodoList() {
+        return Observable.just(Arrays.asList(todoById.values().toArray(new Todo[]{})));
     }
 
-    @Override
-    public Flux<Todo> addTodo(String text) {
-        return Flux.create(s -> {
+    public Observable<Todo> addTodo(String text) {
+        return Observable.create(s -> {
             long newId = lastId.incrementAndGet();
             Todo todo = new Todo(newId, text);
             this.todoById.put(todo.getId(), todo);
-            s.next(todo);
-            s.complete();
+            s.onNext(todo);
+            s.onCompleted();
         });
     }
 
-    @Override
-    public Flux<Todo> deleteTodoById(Long todoId) {
-        return Flux.create(s -> {
+    public Observable<Todo> deleteTodoById(Long todoId) {
+        return Observable.create(s -> {
             Todo delTodo = todoById.get(todoId);
             todoById.remove(todoId);
-            s.next(delTodo);
-            s.complete();
+            s.onNext(delTodo);
+            s.onCompleted();
         });
     }
 }
