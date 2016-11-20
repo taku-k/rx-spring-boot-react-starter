@@ -6,7 +6,6 @@ React structure follows [the Ducks pattern](https://github.com/erikras/ducks-mod
 This starter is powered by the following technology stack:
 
 - [x] [Spring Boot](https://projects.spring.io/spring-boot/)
-- [x] [Reactor](https://projectreactor.io/)
 - [x] [RxJava](https://github.com/ReactiveX/RxJava)
 - [x] [React](https://facebook.github.io/react/) and [JSX](https://facebook.github.io/jsx/)
 - [x] [Redux](http://redux.js.org/)
