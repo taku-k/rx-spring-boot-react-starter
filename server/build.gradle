@@ -41,4 +41,5 @@ dependencies {
     compile 'io.reactivex:rxjava:1.2.2'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.assertj:assertj-core:3.2.0'
 }
