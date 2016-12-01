@@ -1,0 +1,11 @@
+@import "../../../../styles/styles.scss";
+
+.github-stats-app {
+  display: block;
+  height: 100%;
+  background-color: $dsb-seashell;
+}
+
+.content {
+  padding: $dsb-standard-space;
+}

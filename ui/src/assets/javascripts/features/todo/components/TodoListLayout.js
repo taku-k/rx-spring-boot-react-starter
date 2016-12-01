@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { AppBar } from 'material-ui';
-import IconButton from 'material-ui/IconButton';
 import { List } from 'material-ui/List';
-import BuildIcon from 'material-ui/svg-icons/action/build';
 import TodoItem from './TodoItem';
 import TodoAdd from './TodoAdd';
 import Subheader from 'material-ui/Subheader';
@@ -29,11 +27,6 @@ export default class TodoListLayout extends Component {
 
     return (
       <div className="todo-list-app">
-        <AppBar
-          title="Reactor Spring Boot React Starter App"
-          iconElementLeft={<IconButton><BuildIcon /></IconButton>}
-          className="nav-bar"
-        />
         <div className="content">
           <Card>
             <TodoAdd actions={actions}/>
