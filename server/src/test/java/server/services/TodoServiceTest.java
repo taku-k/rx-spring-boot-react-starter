@@ -10,7 +10,7 @@ import java.util.List;
 public class TodoServiceTest {
     @Test
     public void testGetEmptyTodoList() {
-        TodoService todoService = new TodoService();
+        TodoService todoService = new TodoServiceImpl();
         TestSubscriber<List<Todo>> testSubscriber = new TestSubscriber<>();
         todoService.getTodoList().subscribe(testSubscriber);
 
@@ -24,7 +24,7 @@ public class TodoServiceTest {
 
     @Test
     public void testOneTodoList() {
-        TodoService todoService = new TodoService();
+        TodoService todoService = new TodoServiceImpl();
         // Add one text to the list
         todoService.addTodo("todo1").toBlocking().first();
         TestSubscriber<List<Todo>> testSubscriber = new TestSubscriber<>();

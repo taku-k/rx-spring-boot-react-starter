@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class TodoService implements ITodoService {
+public class TodoServiceImpl implements TodoService {
     private final ConcurrentHashMap<Long, Todo> todoById = new ConcurrentHashMap<>();
     private final AtomicLong lastId = new AtomicLong(0);
 

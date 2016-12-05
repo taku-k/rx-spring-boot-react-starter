@@ -5,7 +5,7 @@ import server.domain.Todo;
 
 import java.util.List;
 
-public interface ITodoService {
+public interface TodoService {
     Observable<List<Todo>> getTodoList();
 
     Observable<Todo> addTodo(String text);

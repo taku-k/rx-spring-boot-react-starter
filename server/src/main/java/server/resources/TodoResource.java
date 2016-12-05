@@ -3,7 +3,7 @@ package server.resources;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import server.domain.Todo;
-import server.services.ITodoService;
+import server.services.TodoService;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api/todo")
 public class TodoResource {
     @Autowired
-    ITodoService todoService;
+    TodoService todoService;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Todo> list() {
