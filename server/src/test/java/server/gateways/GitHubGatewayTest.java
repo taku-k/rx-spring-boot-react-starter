@@ -13,6 +13,9 @@ import server.domain.CommittedFile;
 import server.domain.Repository;
 import server.domain.SingleCommit;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -49,12 +52,14 @@ public class GitHubGatewayTest {
 
     @Test
     public void getCommits() {
+        String aWeekAgo = ZonedDateTime.now(ZoneOffset.UTC).minusWeeks(1).minusDays(1)
+                .format(DateTimeFormatter.ofPattern("yyyy-mm-dd'T'00:00:00'Z'"));;
         MockRestServiceServer mockServer = MockRestServiceServer.bindTo(restTemplate).build();
-        mockServer.expect(requestTo(String.format(GitHubGateway.COMMITS, user, repo)))
+        mockServer.expect(requestTo(String.format(GitHubGateway.COMMITS, user, repo, aWeekAgo)))
                 .andRespond(withSuccess(
                         "[{\"sha\":\"" + sha + "\",\"url\":\"https://example.com\",\"committer\":{\"login\":\"" + user + "\"}}]",
                         MediaType.APPLICATION_JSON));
-        List<Commit> commits = gitHubGateway.getCommits(user, repo);
+        List<Commit> commits = gitHubGateway.getCommitsInWeek(user, repo);
         assertThat(commits.size()).isEqualTo(1);
         assertThat(commits.get(0).getCommitter().getLogin()).isEqualTo("taku-k");
         mockServer.verify();

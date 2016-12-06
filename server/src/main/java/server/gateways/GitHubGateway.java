@@ -7,6 +7,10 @@ import server.domain.Commit;
 import server.domain.Repository;
 import server.domain.SingleCommit;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +24,7 @@ public class GitHubGateway {
 
     private static final String BASE = "https://api.github.com";
     public static final String REPOS = BASE + "/users/%s/repos";
-    public static final String COMMITS = BASE + "/repos/%s/%s/commits";
+    public static final String COMMITS = BASE + "/repos/%s/%s/commits?since=%s";
     public static final String SINGLE_COMMIT = BASE + "/repos/%s/%s/commits/%s";
 
     public GitHubGateway(RestTemplate restTemplate) {
@@ -33,9 +37,11 @@ public class GitHubGateway {
         return Arrays.asList(repos);
     }
 
-    public List<Commit> getCommits(String user, String repo) {
+    public List<Commit> getCommitsInWeek(String user, String repo) {
         logger.debug(format("Get commits by repo(%s)", repo));
-        Commit[] commits = restTemplate.getForObject(format(COMMITS, user, repo), Commit[].class);
+        String aWeekAgo = ZonedDateTime.now(ZoneOffset.UTC).minusWeeks(1).minusDays(1)
+                .format(DateTimeFormatter.ofPattern("yyyy-mm-dd'T'00:00:00'Z'"));
+        Commit[] commits = restTemplate.getForObject(format(COMMITS, user, repo, aWeekAgo), Commit[].class);
         return Arrays.asList(commits);
     }
 
