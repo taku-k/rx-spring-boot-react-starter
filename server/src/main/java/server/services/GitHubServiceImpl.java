@@ -1,6 +1,7 @@
 package server.services;
 
 import rx.Observable;
+import server.domain.Commit;
 import server.domain.Repository;
 import server.gateways.GitHubGateway;
 
@@ -30,6 +31,14 @@ public class GitHubServiceImpl implements GitHubService {
                 .stream()
                 .filter(repo -> repo.getUpdate().isAfter(LocalDateTime.now().minusWeeks(1)))
                 .map(Repository::getName)
+                .collect(Collectors.toList()));
+    }
+
+    @Override
+    public Observable<List<Commit>> getCommitsInWeek(String user, String repo) {
+        return Observable.just(gitHubGateway.getCommitsInWeek(user, repo)
+                .stream()
+                .filter(commit -> commit.getCommitter().getLogin().equals(user))
                 .collect(Collectors.toList()));
     }
 }
