@@ -39,22 +39,26 @@ public class GitHubServiceImplTest {
     @Test
     public void getReposInWeek() throws Exception {
         // Setup
-        TestSubscriber<List<String>> testSubscriber = new TestSubscriber<>();
-        gitHubService.getReposInWeek("test-user").subscribe(testSubscriber);
+        TestSubscriber<String> testSubscriber = new TestSubscriber<>();
+        gitHubService.getReposInWeek("test-user")
+                .subscribe(testSubscriber);
 
         testSubscriber.assertNoErrors();
-        assertThat(testSubscriber.getOnNextEvents().get(0))
+        assertThat(testSubscriber.getOnNextEvents())
+                .as("getReposInWeek returns updated repos within one week")
                 .containsExactly("repo2", "repo3");
     }
 
     @Test
     public void getCommitsInWeek() throws Exception {
         // Setup
-        TestSubscriber<List<Commit>> testSubscriber = new TestSubscriber<>();
-        gitHubService.getCommitsInWeek("test-user", "test-repo").subscribe(testSubscriber);
+        TestSubscriber<Commit> testSubscriber = new TestSubscriber<>();
+        gitHubService.getCommitsInWeek("test-user", "test-repo")
+                .subscribe(testSubscriber);
 
         testSubscriber.assertNoErrors();
-        assertThat(testSubscriber.getOnNextEvents().get(0))
+        assertThat(testSubscriber.getOnNextEvents())
+                .as("getCommitsInWeek returns commits updated by `user` within one week")
                 .extracting(Commit::getSha)
                 .containsExactly("sha1");
     }
