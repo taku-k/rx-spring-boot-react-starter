@@ -81,8 +81,8 @@ public class GitHubServiceImplTest {
         } catch (InterruptedException ignore) {
         }
         return Arrays.asList(
-                new Commit("sha1", new Committer("test-user")),
-                new Commit("sha2", new Committer("no-test-user"))
+                Commit.builder().sha("sha1").committer(new Committer("test-user")).build(),
+                Commit.builder().sha("sha2").committer(new Committer("no-test-user")).build()
         );
     }
 }
