@@ -45,6 +45,7 @@ public class GitHubGatewayTest {
             );
 
         List<Repository> repos = gitHubGateway.getRepos(user);
+
         assertThat(repos.size()).isEqualTo(1);
         assertThat(repos.get(0).getUpdate().getHour()).isEqualTo(14);
         mockServer.verify();
@@ -59,7 +60,9 @@ public class GitHubGatewayTest {
                 .andRespond(withSuccess(
                         "[{\"sha\":\"" + sha + "\",\"url\":\"https://example.com\",\"committer\":{\"login\":\"" + user + "\"}}]",
                         MediaType.APPLICATION_JSON));
+
         List<Commit> commits = gitHubGateway.getCommitsInWeek(user, repo);
+
         assertThat(commits.size()).isEqualTo(1);
         assertThat(commits.get(0).getCommitter().getLogin()).isEqualTo("taku-k");
         mockServer.verify();
@@ -72,7 +75,9 @@ public class GitHubGatewayTest {
                 .andRespond(withSuccess(
                         "{\"sha\":\"" + sha + "\",\"files\":[{\"filename\":\"file1.txt\",\"changes\":12}]}",
                         MediaType.APPLICATION_JSON));
+
         SingleCommit singleCommit = gitHubGateway.getSingleCommit(user, repo, sha);
+
         assertThat(singleCommit.getFiles())
                 .extracting(CommittedFile::getFilename, CommittedFile::getChanges)
                 .containsExactly(tuple("file1.txt", 12L));

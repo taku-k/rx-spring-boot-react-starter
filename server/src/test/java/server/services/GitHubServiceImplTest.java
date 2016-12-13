@@ -6,9 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import rx.observers.TestSubscriber;
-import server.domain.Commit;
-import server.domain.Committer;
-import server.domain.Repository;
+import server.domain.*;
 import server.gateways.GitHubGateway;
 
 import java.time.LocalDateTime;
@@ -34,12 +32,13 @@ public class GitHubServiceImplTest {
 
         when(gitHubGateway.getRepos(anyString())).thenAnswer(m -> getReposForTest());
         when(gitHubGateway.getCommitsInWeek(anyString(), anyString())).thenAnswer(m -> getCommitsInWeekForTest());
+        when(gitHubGateway.getSingleCommitByUrl(anyString())).thenAnswer(m -> getSingleCommitForTest());
     }
 
     @Test
     public void getReposInWeek() throws Exception {
-        // Setup
         TestSubscriber<String> testSubscriber = new TestSubscriber<>();
+
         gitHubService.getReposInWeek("test-user")
                 .subscribe(testSubscriber);
 
@@ -51,8 +50,8 @@ public class GitHubServiceImplTest {
 
     @Test
     public void getCommitsInWeek() throws Exception {
-        // Setup
         TestSubscriber<Commit> testSubscriber = new TestSubscriber<>();
+
         gitHubService.getCommitsInWeek("test-user", "test-repo")
                 .subscribe(testSubscriber);
 
@@ -61,6 +60,20 @@ public class GitHubServiceImplTest {
                 .as("getCommitsInWeek returns commits updated by `user` within one week")
                 .extracting(Commit::getSha)
                 .containsExactly("sha1");
+    }
+
+    @Test
+    public void fetchCommittedFilesByUserNormally() {
+        TestSubscriber<CommittedFile> testSubscriber = new TestSubscriber<>();
+
+        gitHubService.getCommittedFilesByUser("test-user")
+                .subscribe(testSubscriber);
+
+        testSubscriber.assertNoErrors();
+        assertThat(testSubscriber.getOnNextEvents())
+                .as("getCommittedFilesByUser returns CommittedFiles by `user`")
+                .extracting(CommittedFile::getFilename)
+                .containsOnly("filename1", "filename1", "filename2", "filename2");
     }
 
     private List<Repository> getReposForTest() {
@@ -81,8 +94,29 @@ public class GitHubServiceImplTest {
         } catch (InterruptedException ignore) {
         }
         return Arrays.asList(
-                Commit.builder().sha("sha1").committer(new Committer("test-user")).build(),
-                Commit.builder().sha("sha2").committer(new Committer("no-test-user")).build()
+                Commit.builder()
+                        .sha("sha1")
+                        .committer(new Committer("test-user"))
+                        .commit(new CommitDetail("url1"))
+                        .build(),
+                Commit.builder()
+                        .sha("sha2")
+                        .committer(new Committer("no-test-user"))
+                        .commit(new CommitDetail("url2"))
+                        .build()
+        );
+    }
+
+    private SingleCommit getSingleCommitForTest() {
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException ignore) {
+        }
+        return new SingleCommit(
+                Arrays.asList(
+                        new CommittedFile("filename1", 10),
+                        new CommittedFile("filename2", 20)
+                )
         );
     }
 }
