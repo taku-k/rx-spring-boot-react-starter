@@ -49,4 +49,9 @@ public class GitHubGateway {
         logger.debug(format("Get a single commit by sha(%s)", sha));
         return restTemplate.getForObject(format(SINGLE_COMMIT, user, repo, sha), SingleCommit.class);
     }
+
+    public SingleCommit getSingleCommitByUrl(String url) {
+        logger.debug(format("Get a single commit by url(%s)", url));
+        return restTemplate.getForObject(url, SingleCommit.class);
+    }
 }
