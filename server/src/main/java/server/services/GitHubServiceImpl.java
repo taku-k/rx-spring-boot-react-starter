@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GitHubServiceImpl implements GitHubService {
-    private GitHubGateway gitHubGateway;
+    private final GitHubGateway gitHubGateway;
 
     public GitHubServiceImpl(GitHubGateway gitHubGateway) {
         this.gitHubGateway = gitHubGateway;
@@ -20,10 +20,10 @@ public class GitHubServiceImpl implements GitHubService {
     @Override
     public Observable<String> getRepos(String user) {
         return Observable.create(s -> {
-           gitHubGateway.getRepos(user).stream()
-                   .map(Repository::getName)
-                   .forEach(s::onNext);
-           s.onCompleted();
+            gitHubGateway.getRepos(user).stream()
+                    .map(Repository::getName)
+                    .forEach(s::onNext);
+            s.onCompleted();
         });
     }
 
@@ -51,14 +51,25 @@ public class GitHubServiceImpl implements GitHubService {
     @Override
     public Observable<CommittedFile> getCommittedFiles(String user, String repo, String sha) {
         return Observable.create(s -> {
-           gitHubGateway.getSingleCommit(user, repo, sha).getFiles()
-                   .forEach(s::onNext);
-           s.onCompleted();
+            gitHubGateway.getSingleCommit(user, repo, sha).getFiles()
+                    .forEach(s::onNext);
+            s.onCompleted();
+        });
+    }
+
+    @Override
+    public Observable<CommittedFile> getCommittedFilesByUrl(String url) {
+        return Observable.create(s -> {
+            gitHubGateway.getSingleCommitByUrl(url).getFiles()
+                    .forEach(s::onNext);
+            s.onCompleted();
         });
     }
 
     @Override
     public Observable<CommittedFile> getCommittedFilesByUser(String user) {
-        return null;
+        return getReposInWeek(user)
+                .flatMap(repo -> getCommitsInWeek(user, repo))
+                .flatMap(commit -> getCommittedFilesByUrl(commit.getCommit().getUrl()));
     }
 }

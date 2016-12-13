@@ -15,5 +15,7 @@ public interface GitHubService {
 
     Observable<CommittedFile> getCommittedFiles(String user, String repo, String sha);
 
+    Observable<CommittedFile> getCommittedFilesByUrl(String url);
+
     Observable<CommittedFile> getCommittedFilesByUser(String user);
 }
