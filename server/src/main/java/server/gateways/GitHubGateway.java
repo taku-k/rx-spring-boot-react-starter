@@ -23,9 +23,9 @@ public class GitHubGateway {
     private RestTemplate restTemplate;
 
     private static final String BASE = "https://api.github.com";
-    public static final String REPOS = BASE + "/users/%s/repos";
-    public static final String COMMITS = BASE + "/repos/%s/%s/commits?since=%s";
-    public static final String SINGLE_COMMIT = BASE + "/repos/%s/%s/commits/%s";
+    static final String REPOS = BASE + "/users/%s/repos";
+    static final String COMMITS = BASE + "/repos/%s/%s/commits?since=%s";
+    static final String SINGLE_COMMIT = BASE + "/repos/%s/%s/commits/%s";
 
     public GitHubGateway(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
