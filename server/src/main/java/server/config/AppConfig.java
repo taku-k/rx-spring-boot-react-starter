@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import server.gateways.GitHubGateway;
+import server.services.LanguageStatisticsService;
+import server.services.LanguageStatisticsServiceImpl;
 import server.services.TodoService;
 import server.services.TodoServiceImpl;
 
@@ -22,5 +24,10 @@ public class AppConfig {
     @Bean
     public GitHubGateway gitHubGateway() {
         return new GitHubGateway(restTemplate());
+    }
+
+    @Bean
+    public LanguageStatisticsService languageStatisticsService() {
+        return new LanguageStatisticsServiceImpl();
     }
 }
