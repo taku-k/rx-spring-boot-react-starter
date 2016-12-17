@@ -17,7 +17,7 @@ public class LanguageStatisticsServiceImpl implements LanguageStatisticsService 
             if (node.getTag() == Tag.MAP) {
                 LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) super
                         .constructObject(node);
-                if (Language.checkLanguage(map)) {
+                if (Language.isValid(map)) {
                     Language lang = Language.createFromMap(map);
                     return lang;
                 }

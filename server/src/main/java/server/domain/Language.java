@@ -28,7 +28,7 @@ public class Language {
                 .build();
     }
 
-    public static boolean checkLanguage(Map<String, Object> map) {
+    public static boolean isValid(Map<String, Object> map) {
         return map.containsKey("type");
     }
 }
