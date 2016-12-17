@@ -31,9 +31,8 @@ public class LanguageStatisticsServiceImpl implements LanguageStatisticsService 
     public LanguageStatisticsServiceImpl() {
         Constructor constructor = new LanguageConstructor();
         Yaml yaml = new Yaml(constructor);
-//        languages = (Map<String, Language>) yaml.load(getClass().getResourceAsStream("languages.yml"));
-        languages = (Map<String, Language>) yaml.load("Ruby:\n  type: programming\n  color: \"#701516\"\n  extensions:\n    - \".rb\"\n    - \".builder\"\n  ace_model: ruby\n  language_id: 326");
-        System.out.println(languages);
+        languages = (Map<String, Language>) yaml.load(
+                getClass().getClassLoader().getResourceAsStream("languages.yml"));
     }
 
     @Override
