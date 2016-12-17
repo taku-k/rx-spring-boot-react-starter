@@ -47,6 +47,7 @@ dependencies {
     compile 'com.google.guava:guava:20.0'
     compile 'io.reactivex:rxjava:1.2.2'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.1'
+    compile 'org.yaml:snakeyaml:1.17'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'org.assertj:assertj-core:3.2.0'
