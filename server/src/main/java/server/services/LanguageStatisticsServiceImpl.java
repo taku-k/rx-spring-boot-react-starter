@@ -1,10 +1,13 @@
 package server.services;
 
+import io.reactivex.Flowable;
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.Tag;
-import rx.Observable;
 import server.domain.CommittedFile;
 import server.domain.Language;
 
@@ -12,6 +15,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class LanguageStatisticsServiceImpl implements LanguageStatisticsService {
+    private static final Logger LOG = LoggerFactory.getLogger(LanguageStatisticsServiceImpl.class);
+
     private class LanguageConstructor extends Constructor {
         @Override
         @SuppressWarnings("unchecked")
@@ -68,18 +73,19 @@ public class LanguageStatisticsServiceImpl implements LanguageStatisticsService 
     }
 
     @Override
-    public Map<Language, Double> calcLangStats(Observable<CommittedFile> files) {
+    public Map<Language, Double> calcLangStats(Flowable<CommittedFile> files) {
         Map<Language, Double> stats = new HashMap<>();
         Map<Language, List<CommittedFile>> filesByLang = new HashMap<>();
         AtomicLong sum = new AtomicLong(0);
-        files.toBlocking().forEach(file -> {
-            String[] split = file.getFilename().split(".");
-            String ext = split[split.length - 1];
+        files.blockingIterable().forEach(file -> {
+            String ext = FilenameUtils.getExtension(file.getFilename());
             if (extensionLanguage.containsKey(ext)) {
                 Language lang = extensionLanguage.get(ext);
                 filesByLang.putIfAbsent(lang, new ArrayList<>());
                 filesByLang.get(lang).add(file);
                 sum.addAndGet(file.getChanges());
+            } else {
+                LOG.info("Extension is not found: " + ext);
             }
         });
         for (Map.Entry<Language, List<CommittedFile>> e : filesByLang.entrySet()) {
@@ -89,4 +95,5 @@ public class LanguageStatisticsServiceImpl implements LanguageStatisticsService 
         }
         return stats;
     }
+
 }

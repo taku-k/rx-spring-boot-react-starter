@@ -7,7 +7,6 @@ import server.domain.Commit;
 import server.domain.Repository;
 import server.domain.SingleCommit;
 
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,7 +17,7 @@ import static java.lang.String.format;
 
 @Slf4j
 public class GitHubGateway {
-    private static Logger logger = Logger.getLogger(GitHubGateway.class);
+    private static final Logger LOG = Logger.getLogger(GitHubGateway.class);
 
     private RestTemplate restTemplate;
 
@@ -32,26 +31,26 @@ public class GitHubGateway {
     }
 
     public List<Repository> getRepos(String user) {
-        logger.debug(format("Get repos by user(%s)", user));
+        LOG.info(format("Get repos by user(%s)", user));
         Repository[] repos = restTemplate.getForObject(format(REPOS, user), Repository[].class);
         return Arrays.asList(repos);
     }
 
     public List<Commit> getCommitsInWeek(String user, String repo) {
-        logger.debug(format("Get commits by repo(%s)", repo));
         String aWeekAgo = ZonedDateTime.now(ZoneOffset.UTC).minusWeeks(1).minusDays(1)
                 .format(DateTimeFormatter.ofPattern("yyyy-mm-dd'T'00:00:00'Z'"));
         Commit[] commits = restTemplate.getForObject(format(COMMITS, user, repo, aWeekAgo), Commit[].class);
+        LOG.info(format("Get commits by repo(%s): %d commits are found", repo, commits.length));
         return Arrays.asList(commits);
     }
 
     public SingleCommit getSingleCommit(String user, String repo, String sha) {
-        logger.debug(format("Get a single commit by sha(%s)", sha));
+        LOG.info(format("Get a single commit by sha(%s)", sha));
         return restTemplate.getForObject(format(SINGLE_COMMIT, user, repo, sha), SingleCommit.class);
     }
 
     public SingleCommit getSingleCommitByUrl(String url) {
-        logger.debug(format("Get a single commit by url(%s)", url));
+        LOG.info(format("Get a single commit by url(%s)", url));
         return restTemplate.getForObject(url, SingleCommit.class);
     }
 }

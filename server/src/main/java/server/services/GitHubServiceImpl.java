@@ -1,14 +1,21 @@
 package server.services;
 
-import rx.Observable;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.domain.Commit;
 import server.domain.CommittedFile;
 import server.domain.Repository;
+import server.domain.SingleCommit;
 import server.gateways.GitHubGateway;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class GitHubServiceImpl implements GitHubService {
+    private static final Logger LOG = LoggerFactory.getLogger(GitHubServiceImpl.class);
     private final GitHubGateway gitHubGateway;
 
     public GitHubServiceImpl(GitHubGateway gitHubGateway) {
@@ -16,58 +23,67 @@ public class GitHubServiceImpl implements GitHubService {
     }
 
     @Override
-    public Observable<String> getRepos(String user) {
-        return Observable.create(s -> {
+    public Flowable<String> getRepos(String user) {
+        return Flowable.create(emitter -> {
             gitHubGateway.getRepos(user).stream()
                     .map(Repository::getName)
-                    .forEach(s::onNext);
-            s.onCompleted();
-        });
+                    .forEach(emitter::onNext);
+            emitter.onComplete();
+        }, BackpressureStrategy.BUFFER);
     }
 
     @Override
-    public Observable<String> getReposInWeek(String user) {
-        return Observable.create(s -> {
+    public Flowable<String> getReposInWeek(String user) {
+        return Flowable.create(emitter -> {
             gitHubGateway.getRepos(user).stream()
-                    .filter(repo -> repo.getUpdate().isAfter(LocalDateTime.now().minusWeeks(1)))
+                    .filter(repo -> repo.getPushed().isAfter(LocalDateTime.now().minusWeeks(1)))
                     .map(Repository::getName)
-                    .forEach(s::onNext);
-            s.onCompleted();
-        });
+                    .forEach(emitter::onNext);
+            emitter.onComplete();
+        }, BackpressureStrategy.BUFFER);
     }
 
     @Override
-    public Observable<Commit> getCommitsInWeek(String user, String repo) {
-        return Observable.create(s -> {
+    public Flowable<Commit> getCommitsInWeek(String user, String repo) {
+        return Flowable.create(emitter -> {
             gitHubGateway.getCommitsInWeek(user, repo).stream()
                     .filter(commit -> commit.getCommitter().getLogin().equals(user))
-                    .forEach(s::onNext);
-            s.onCompleted();
-        });
+                    .forEach(emitter::onNext);
+            emitter.onComplete();
+        }, BackpressureStrategy.BUFFER);
     }
 
     @Override
-    public Observable<CommittedFile> getCommittedFiles(String user, String repo, String sha) {
-        return Observable.create(s -> {
+    public Flowable<CommittedFile> getCommittedFiles(String user, String repo, String sha) {
+        return Flowable.create(emitter -> {
             gitHubGateway.getSingleCommit(user, repo, sha).getFiles()
-                    .forEach(s::onNext);
-            s.onCompleted();
-        });
+                    .forEach(emitter::onNext);
+            emitter.onComplete();
+        }, BackpressureStrategy.BUFFER);
     }
 
     @Override
-    public Observable<CommittedFile> getCommittedFilesByUrl(String url) {
-        return Observable.create(s -> {
-            gitHubGateway.getSingleCommitByUrl(url).getFiles()
-                    .forEach(s::onNext);
-            s.onCompleted();
-        });
+    public Flowable<CommittedFile> getCommittedFilesByUrl(String url) {
+        return Flowable.create(emitter -> {
+            SingleCommit commit = gitHubGateway.getSingleCommitByUrl(url);
+            LOG.info(commit.toString());
+            commit.getFiles().forEach(files -> {
+                LOG.info(files.toString());
+                if (files != null) {
+                    emitter.onNext(files);
+                }
+            });
+            emitter.onComplete();
+        }, BackpressureStrategy.BUFFER);
     }
 
     @Override
-    public Observable<CommittedFile> getCommittedFilesByUser(String user) {
+    public Flowable<CommittedFile> getCommittedFilesByUser(String user) {
         return getReposInWeek(user)
-                .flatMap(repo -> getCommitsInWeek(user, repo))
-                .flatMap(commit -> getCommittedFilesByUrl(commit.getCommit().getUrl()));
+                .flatMap(repo -> Flowable.combineLatest(
+                        Flowable.just(repo),
+                        getCommitsInWeek(user, repo),
+                        (r, c) -> Pair.of(r, c)))
+                .flatMap(pair -> getCommittedFiles(user, pair.getLeft(), pair.getRight().getSha()));
     }
 }

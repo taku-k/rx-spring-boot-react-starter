@@ -1,21 +1,19 @@
 package server.services;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 import server.domain.Commit;
 import server.domain.CommittedFile;
 
-import java.util.List;
-
 public interface GitHubService {
-    Observable<String> getRepos(String user);
+    Flowable<String> getRepos(String user);
 
-    Observable<String> getReposInWeek(String user);
+    Flowable<String> getReposInWeek(String user);
 
-    Observable<Commit> getCommitsInWeek(String user, String repo);
+    Flowable<Commit> getCommitsInWeek(String user, String repo);
 
-    Observable<CommittedFile> getCommittedFiles(String user, String repo, String sha);
+    Flowable<CommittedFile> getCommittedFiles(String user, String repo, String sha);
 
-    Observable<CommittedFile> getCommittedFilesByUrl(String url);
+    Flowable<CommittedFile> getCommittedFilesByUrl(String url);
 
-    Observable<CommittedFile> getCommittedFilesByUser(String user);
+    Flowable<CommittedFile> getCommittedFilesByUser(String user);
 }

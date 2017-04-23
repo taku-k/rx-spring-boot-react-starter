@@ -53,6 +53,8 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxjava:2.0.2'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.1'
     compile 'org.yaml:snakeyaml:1.17'
+    compile 'org.apache.commons:commons-lang3:3.1'
+    compile 'commons-io:commons-io:2.5'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'org.assertj:assertj-core:3.2.0'

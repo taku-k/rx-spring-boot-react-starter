@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Repository {
     private String name;
 
-    @JsonProperty("updated_at")
+    @JsonProperty("pushed_at")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime update;
+    private LocalDateTime pushed;
 }
