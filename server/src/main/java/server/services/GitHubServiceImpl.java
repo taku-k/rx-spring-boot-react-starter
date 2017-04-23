@@ -7,8 +7,6 @@ import server.domain.Repository;
 import server.gateways.GitHubGateway;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class GitHubServiceImpl implements GitHubService {
     private final GitHubGateway gitHubGateway;

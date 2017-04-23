@@ -34,6 +34,10 @@ task serverBuild(dependsOn: assemble) {
 }
 task allAssemble(dependsOn: [serverBuild, uiBuild])
 
+test {
+    testLogging.showStandardStreams = true
+}
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -46,6 +50,7 @@ dependencies {
     compile 'org.projectlombok:lombok:1.16.10'
     compile 'com.google.guava:guava:20.0'
     compile 'io.reactivex:rxjava:1.2.2'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.2'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.1'
     compile 'org.yaml:snakeyaml:1.17'
 

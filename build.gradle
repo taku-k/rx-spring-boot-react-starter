@@ -1,8 +1,12 @@
 buildscript {
-    repositories { jcenter() }
+    repositories {
+        jcenter()
+        mavenLocal()
+    }
 
     dependencies {
         classpath "com.moowork.gradle:gradle-node-plugin:0.13"
+        classpath "me.taku_k.gradle.yarn:gradle-yarn-plugin:0.1.2"
     }
 }
 

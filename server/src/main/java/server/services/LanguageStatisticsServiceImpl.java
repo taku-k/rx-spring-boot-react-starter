@@ -4,12 +4,12 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.Tag;
+import rx.Observable;
+import server.domain.CommittedFile;
 import server.domain.Language;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class LanguageStatisticsServiceImpl implements LanguageStatisticsService {
     private class LanguageConstructor extends Constructor {
@@ -65,5 +65,28 @@ public class LanguageStatisticsServiceImpl implements LanguageStatisticsService 
     @Override
     public Language getLanguageByName(String name) {
         return languages.get(name);
+    }
+
+    @Override
+    public Map<Language, Double> calcLangStats(Observable<CommittedFile> files) {
+        Map<Language, Double> stats = new HashMap<>();
+        Map<Language, List<CommittedFile>> filesByLang = new HashMap<>();
+        AtomicLong sum = new AtomicLong(0);
+        files.toBlocking().forEach(file -> {
+            String[] split = file.getFilename().split(".");
+            String ext = split[split.length - 1];
+            if (extensionLanguage.containsKey(ext)) {
+                Language lang = extensionLanguage.get(ext);
+                filesByLang.putIfAbsent(lang, new ArrayList<>());
+                filesByLang.get(lang).add(file);
+                sum.addAndGet(file.getChanges());
+            }
+        });
+        for (Map.Entry<Language, List<CommittedFile>> e : filesByLang.entrySet()) {
+            long sumLang = e.getValue().stream().mapToLong(CommittedFile::getChanges).sum();
+            double rate = (double)sumLang / (double)sum.get() * 100.0;
+            stats.put(e.getKey(), rate);
+        }
+        return stats;
     }
 }
