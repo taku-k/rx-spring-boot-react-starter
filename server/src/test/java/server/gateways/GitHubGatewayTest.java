@@ -40,14 +40,14 @@ public class GitHubGatewayTest {
         MockRestServiceServer mockServer = MockRestServiceServer.bindTo(restTemplate).build();
         mockServer.expect(requestTo(String.format(GitHubGateway.REPOS, user)))
             .andRespond(withSuccess(
-                            "[{\"name\":\"repo1\",\"updated_at\":\"2016-11-28T14:12:46Z\"}]",
+                            "[{\"name\":\"repo1\",\"pushed_at\":\"2016-11-28T14:12:46Z\"}]",
                             MediaType.APPLICATION_JSON)
             );
 
         List<Repository> repos = gitHubGateway.getRepos(user);
 
         assertThat(repos.size()).isEqualTo(1);
-        assertThat(repos.get(0).getUpdate().getHour()).isEqualTo(14);
+        assertThat(repos.get(0).getPushed().getHour()).isEqualTo(14);
         mockServer.verify();
     }
 

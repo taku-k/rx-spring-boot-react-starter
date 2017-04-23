@@ -1,11 +1,11 @@
 package server.services;
 
+import io.reactivex.subscribers.TestSubscriber;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import rx.observers.TestSubscriber;
 import server.domain.*;
 import server.gateways.GitHubGateway;
 
@@ -32,6 +32,7 @@ public class GitHubServiceImplTest {
 
         when(gitHubGateway.getRepos(anyString())).thenAnswer(m -> getReposForTest());
         when(gitHubGateway.getCommitsInWeek(anyString(), anyString())).thenAnswer(m -> getCommitsInWeekForTest());
+        when(gitHubGateway.getSingleCommit(anyString(), anyString(), anyString())).thenAnswer(m -> getSingleCommitForTest());
         when(gitHubGateway.getSingleCommitByUrl(anyString())).thenAnswer(m -> getSingleCommitForTest());
     }
 
@@ -43,7 +44,7 @@ public class GitHubServiceImplTest {
                 .subscribe(testSubscriber);
 
         testSubscriber.assertNoErrors();
-        assertThat(testSubscriber.getOnNextEvents())
+        assertThat(testSubscriber.values())
                 .as("getReposInWeek returns updated repos within one week")
                 .containsExactly("repo2", "repo3");
     }
@@ -56,7 +57,7 @@ public class GitHubServiceImplTest {
                 .subscribe(testSubscriber);
 
         testSubscriber.assertNoErrors();
-        assertThat(testSubscriber.getOnNextEvents())
+        assertThat(testSubscriber.values())
                 .as("getCommitsInWeek returns commits updated by `user` within one week")
                 .extracting(Commit::getSha)
                 .containsExactly("sha1");
@@ -70,7 +71,7 @@ public class GitHubServiceImplTest {
                 .subscribe(testSubscriber);
 
         testSubscriber.assertNoErrors();
-        assertThat(testSubscriber.getOnNextEvents())
+        assertThat(testSubscriber.values())
                 .as("getCommittedFilesByUser returns CommittedFiles by `user`")
                 .extracting(CommittedFile::getFilename)
                 .containsOnly("filename1", "filename1", "filename2", "filename2");
