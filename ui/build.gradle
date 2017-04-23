@@ -1,9 +1,4 @@
 apply plugin: 'com.moowork.node'
-apply plugin: 'me.taku_k.yarn'
-
-yarn {
-  version = "0.17.9"
-}
 
 task assetsBuild(type: NpmTask) {
   args = ['run', 'build']
