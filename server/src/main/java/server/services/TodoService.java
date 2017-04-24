@@ -1,14 +1,14 @@
 package server.services;
 
-import rx.Observable;
+import io.reactivex.Flowable;
 import server.domain.Todo;
 
 import java.util.List;
 
 public interface TodoService {
-    Observable<List<Todo>> getTodoList();
+    Flowable<List<Todo>> getTodoList();
 
-    Observable<Todo> addTodo(String text);
+    Flowable<Todo> addTodo(String text);
 
-    Observable<Todo> deleteTodoById(Long todoId);
+    Flowable<Todo> deleteTodoById(Long todoId);
 }

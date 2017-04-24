@@ -1,7 +1,7 @@
 package server.services;
 
+import io.reactivex.subscribers.TestSubscriber;
 import org.junit.Test;
-import rx.observers.TestSubscriber;
 import server.domain.Todo;
 import static org.assertj.core.api.Assertions.*;
 
@@ -16,7 +16,7 @@ public class TodoServiceTest {
 
         // No emit error
         testSubscriber.assertNoErrors();
-        List<Todo> emptyTodo = testSubscriber.getOnNextEvents().get(0);
+        List<Todo> emptyTodo = testSubscriber.values().get(0);
         assertThat(emptyTodo)
                 .as("Get empty todo list")
                 .isEmpty();
@@ -26,12 +26,12 @@ public class TodoServiceTest {
     public void testOneTodoList() {
         TodoService todoService = new TodoServiceImpl();
         // Add one text to the list
-        todoService.addTodo("todo1").toBlocking().first();
+        todoService.addTodo("todo1").blockingFirst();
         TestSubscriber<List<Todo>> testSubscriber = new TestSubscriber<>();
         todoService.getTodoList().subscribe(testSubscriber);
 
         testSubscriber.assertNoErrors();
-        List<Todo> oneTodo = testSubscriber.getOnNextEvents().get(0);
+        List<Todo> oneTodo = testSubscriber.values().get(0);
         assertThat(oneTodo)
                 .as("List contains one message `todo1`")
                 .extracting(Todo::getText)

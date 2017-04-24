@@ -15,16 +15,16 @@ public class TodoResource {
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Todo> list() {
-        return todoService.getTodoList().toBlocking().first();
+        return todoService.getTodoList().blockingFirst();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public Todo add(@RequestBody Todo input) {
-        return todoService.addTodo(input.getText()).toBlocking().first();
+        return todoService.addTodo(input.getText()).blockingFirst();
     }
 
     @RequestMapping(value = "/{todoId}", method = RequestMethod.DELETE)
     public Todo del(@PathVariable Long todoId) {
-        return todoService.deleteTodoById(todoId).toBlocking().first();
+        return todoService.deleteTodoById(todoId).blockingFirst();
     }
 }

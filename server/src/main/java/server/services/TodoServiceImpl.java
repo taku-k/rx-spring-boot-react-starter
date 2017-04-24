@@ -1,6 +1,7 @@
 package server.services;
 
-import rx.Observable;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
 import server.domain.Todo;
 
 import java.util.Arrays;
@@ -12,26 +13,26 @@ public class TodoServiceImpl implements TodoService {
     private final ConcurrentHashMap<Long, Todo> todoById = new ConcurrentHashMap<>();
     private final AtomicLong lastId = new AtomicLong(0);
 
-    public Observable<List<Todo>> getTodoList() {
-        return Observable.just(Arrays.asList(todoById.values().toArray(new Todo[]{})));
+    public Flowable<List<Todo>> getTodoList() {
+        return Flowable.just(Arrays.asList(todoById.values().toArray(new Todo[]{})));
     }
 
-    public Observable<Todo> addTodo(String text) {
-        return Observable.create(s -> {
+    public Flowable<Todo> addTodo(String text) {
+        return Flowable.create(emitter -> {
             long newId = lastId.incrementAndGet();
             Todo todo = new Todo(newId, text);
             this.todoById.put(todo.getId(), todo);
-            s.onNext(todo);
-            s.onCompleted();
-        });
+            emitter.onNext(todo);
+            emitter.onComplete();
+        }, BackpressureStrategy.BUFFER);
     }
 
-    public Observable<Todo> deleteTodoById(Long todoId) {
-        return Observable.create(s -> {
+    public Flowable<Todo> deleteTodoById(Long todoId) {
+        return Flowable.create(emitter -> {
             Todo delTodo = todoById.get(todoId);
             todoById.remove(todoId);
-            s.onNext(delTodo);
-            s.onCompleted();
-        });
+            emitter.onNext(delTodo);
+            emitter.onComplete();
+        }, BackpressureStrategy.BUFFER);
     }
 }
