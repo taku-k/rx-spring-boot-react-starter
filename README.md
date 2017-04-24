@@ -1,4 +1,4 @@
-# RxJava + Spring Boot & RxJS(Redux-Observable) + React Starter Project
+# RxJava 2 + Spring Boot & RxJS(Redux-Observable) + React Starter Project
 
 [![Build Status](https://travis-ci.org/taku-k/rx-spring-boot-react-starter.svg?branch=master)](https://travis-ci.org/taku-k/rx-spring-boot-react-starter)
 [![Coverage Status](https://coveralls.io/repos/github/taku-k/rx-spring-boot-react-starter/badge.svg?branch=master)](https://coveralls.io/github/taku-k/rx-spring-boot-react-starter?branch=master)
