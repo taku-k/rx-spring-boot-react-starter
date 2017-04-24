@@ -13,10 +13,4 @@ public class LanguageStatisticsServiceImplTest {
     public void setup() {
         languageStatisticsService = new LanguageStatisticsServiceImpl();
     }
-
-    @Test
-    public void languagesHasRubyLanguage() throws Exception {
-        Language rubyLang = languageStatisticsService.getLanguageByName("Ruby");
-        assertThat(rubyLang).isNotNull();
-    }
 }
