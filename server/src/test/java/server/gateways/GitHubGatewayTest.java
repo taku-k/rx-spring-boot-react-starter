@@ -54,7 +54,7 @@ public class GitHubGatewayTest {
     @Test
     public void getCommits() {
         String aWeekAgo = ZonedDateTime.now(ZoneOffset.UTC).minusWeeks(1).minusDays(1)
-                .format(DateTimeFormatter.ofPattern("yyyy-mm-dd'T'00:00:00'Z'"));;
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'00:00:00'Z'"));;
         MockRestServiceServer mockServer = MockRestServiceServer.bindTo(restTemplate).build();
         mockServer.expect(requestTo(String.format(GitHubGateway.COMMITS, user, repo, aWeekAgo)))
                 .andRespond(withSuccess(

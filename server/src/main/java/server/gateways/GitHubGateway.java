@@ -38,9 +38,10 @@ public class GitHubGateway {
 
     public List<Commit> getCommitsInWeek(String user, String repo) {
         String aWeekAgo = ZonedDateTime.now(ZoneOffset.UTC).minusWeeks(1).minusDays(1)
-                .format(DateTimeFormatter.ofPattern("yyyy-mm-dd'T'00:00:00'Z'"));
-        Commit[] commits = restTemplate.getForObject(format(COMMITS, user, repo, aWeekAgo), Commit[].class);
-        LOG.info(format("Get commits by repo(%s): %d commits are found", repo, commits.length));
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'00:00:00'Z'"));
+        String url = format(COMMITS, user, repo, aWeekAgo);
+        Commit[] commits = restTemplate.getForObject(url, Commit[].class);
+        LOG.info(format("Get commits by repo(%s): %d commits are found", url, commits.length));
         return Arrays.asList(commits);
     }
 
