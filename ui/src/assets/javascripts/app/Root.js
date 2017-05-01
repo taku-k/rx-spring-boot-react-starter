@@ -2,14 +2,16 @@
 
 import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router';
+import { ConnectedRouter } from 'connected-react-router';
 
-import routes from './routes';
+import App from './App';
 
 const Root = ({ store, history }) => {
   let ComponentEl = (
     <Provider store={store}>
-      <Router history={history} routes={routes} />
+      <ConnectedRouter history={history}>
+        <App/>
+      </ConnectedRouter>
     </Provider>
   );
 
@@ -19,7 +21,9 @@ const Root = ({ store, history }) => {
     ComponentEl = (
       <Provider store={store}>
         <div>
-          <Router history={history} routes={routes} />
+          <ConnectedRouter history={history}>
+            <App/>
+          </ConnectedRouter>
           {!window.devToolsExtension ? <DevTools /> : null}
         </div>
       </Provider>

@@ -17,6 +17,7 @@ This starter is powered by the following technology stack:
 - [x] [Webpack 2](https://gist.github.com/sokra/27b24881210b56bbaff7) and [dev middleware](https://github.com/webpack/webpack-dev-middleware)
 - [x] [Reselect](https://github.com/reactjs/reselect)
 - [x] [ESLint](http://eslint.org/docs/user-guide/configuring)
+- [x] [React Router v4](https://github.com/ReactTraining/react-router)
 - [ ] [Flow](https://flowtype.org/docs/getting-started.html)
 - [ ] [Mocha](https://mochajs.org/)
 - [ ] [Enzyme](http://airbnb.io/enzyme/)

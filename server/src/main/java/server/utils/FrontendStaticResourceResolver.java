@@ -14,14 +14,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FrontendStaticResourceResolver implements ResourceResolver {
-    private static final Logger logger = LoggerFactory.getLogger(FrontendStaticResourceResolver.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FrontendStaticResourceResolver.class);
     private Resource index = new ClassPathResource("/static/index.html");
     private List<String> ignoredPaths = Arrays.asList("api");
 
     @Override
     public Resource resolveResource(HttpServletRequest request, String requestPath,
                                     List<? extends Resource> locations, ResourceResolverChain chain) {
-        logger.info(String.format("Requested to [%s]", requestPath));
+        LOG.debug(String.format("Requested to [%s]", requestPath));
         return resolve(requestPath, locations);
     }
 
@@ -42,14 +42,14 @@ public class FrontendStaticResourceResolver implements ResourceResolver {
         if (ignoredPaths.contains(requestPath)) {
             return null;
         }
-        if (StringUtils.getFilenameExtension(requestPath).equals("")) {
+        if (StringUtils.getFilenameExtension(requestPath) == null) {
             return index;
         }
         return locations.stream()
                 .map(loc -> createRelative(loc, requestPath))
                 .filter(resource -> resource != null && resource.exists())
                 .findFirst()
-                .orElse(null);
+                .orElse(index);
     }
 
     private Resource createRelative(Resource resource, String relativePath) {

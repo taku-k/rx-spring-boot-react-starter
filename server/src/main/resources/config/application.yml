@@ -1,2 +1,6 @@
 server.port: 8090
 logging.level.: INFO
+
+spring:
+  profiles:
+    active: devlopment

@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
+
 
 module.exports = {
   output: {
@@ -34,15 +34,8 @@ module.exports = {
       {
         test: /\.jsx?$/,
         include: path.resolve(__dirname, '../src/assets/javascripts'),
-        loader: 'babel'
+        loader: 'babel-loader'
       }
     ]
-  },
-  postcss: function () {
-    return [
-      autoprefixer({
-        browsers: ['last 2 versions']
-      })
-    ];
   }
 };

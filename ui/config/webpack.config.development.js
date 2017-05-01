@@ -25,7 +25,13 @@ module.exports = merge(config, {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.DefinePlugin(ENV)
+    new webpack.DefinePlugin(ENV),
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        context: __dirname,
+        postcss: []
+      }
+    }),
   ],
   module: {
     loaders: [
@@ -38,16 +44,20 @@ module.exports = merge(config, {
           path.resolve(__dirname, '../src/scripts')
         ],
         loaders: [
-          'style',
-          'css',
-          'postcss',
-          {loader: 'sass', query: {outputStyle: 'expanded'}}
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+          {loader: 'sass-loader', query: {outputStyle: 'expanded'}}
         ]
       },
       // CSS
       {
         test: /\.css$/,
-        loader: 'style!css!postcss'
+        loaders: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader'
+        ]
       }
     ]
   }

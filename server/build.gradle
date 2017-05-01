@@ -21,7 +21,7 @@ apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 
 jar {
-    baseName = 'reactor-spring-boot-react-server'
+    baseName = 'rx-spring-boot-react-starter'
     version = '0.0.1-SNAPSHOT'
     from('../ui/build') {
         into 'static'

@@ -3,6 +3,7 @@ const merge = require('webpack-merge');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const config = require('./webpack.config.base');
+const autoprefixer = require('autoprefixer');
 
 const ENV = {
   'process.env': {
@@ -12,7 +13,7 @@ const ENV = {
 };
 
 module.exports = merge(config, {
-  debug: false,
+  // debug: false,
   devtool: 'inline-source-map',
   entry: {
     application: 'main',
@@ -35,7 +36,12 @@ module.exports = merge(config, {
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true,
-      debug: false
+      options: {
+        context: __dirname,
+        postcss: [
+          autoprefixer
+        ]
+      }
     }),
     new ExtractTextPlugin({
       filename: 'css/app.css',
@@ -54,11 +60,11 @@ module.exports = merge(config, {
           path.resolve(__dirname, '../src/scripts')
         ],
         loader: ExtractTextPlugin.extract({
-          fallbackLoader: 'style',
+          fallbackLoader: 'style-loader',
           loader: [
-            { loader: 'css', query: { sourceMap: true } },
-            'postcss',
-            { loader: 'sass', query: { outputStyle: 'compressed' } }
+            { loader: 'css-loader', query: { sourceMap: true } },
+            'postcss-loader',
+            { loader: 'sass-loader', query: { outputStyle: 'compressed' } }
           ]
         })
       },
@@ -66,8 +72,8 @@ module.exports = merge(config, {
       {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract({
-          fallbackLoader: 'style',
-          loader: ['css', 'postcss']
+          fallbackLoader: 'style-loader',
+          loader: ['css-loader', 'postcss-loader']
         })
       }
     ]
