@@ -39,6 +39,7 @@ public class LanguageStatisticsServiceImpl implements LanguageStatisticsService 
                                  .ratio(rate)
                                  .build());
         }
+        stats.sort(Comparator.comparing(GitHubStats::getRatio));
         return stats;
     }
 }
