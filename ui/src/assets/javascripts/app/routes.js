@@ -6,7 +6,7 @@ import GithubStatsView from 'features/github-stats/components/GithubStatsView';
 import NotFoundView from 'components/NotFound';
 
 export default (
-  <Switch>
+  <Switch style={{height: "100%"}}>
     <Route exact path="/" component={TodoListView} />
     <Route path="/github" component={GithubStatsView} />
     <Route path="/404" component={NotFoundView} />
