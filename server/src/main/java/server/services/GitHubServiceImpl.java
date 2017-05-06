@@ -2,6 +2,8 @@ package server.services;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,6 +86,8 @@ public class GitHubServiceImpl implements GitHubService {
                         Flowable.just(repo),
                         getCommitsInWeek(user, repo),
                         (r, c) -> Pair.of(r, c)))
-                .flatMap(pair -> getCommittedFiles(user, pair.getLeft(), pair.getRight().getSha()));
+                .flatMap(pair -> {
+                    return getCommittedFiles(user, pair.getLeft(), pair.getRight().getSha());
+                });
     }
 }

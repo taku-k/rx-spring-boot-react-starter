@@ -21,7 +21,7 @@ public class LanguageStatisticsServiceImpl implements LanguageStatisticsService 
         List<GitHubStats> stats = new ArrayList<>();
         Map<Language, List<CommittedFile>> filesByLang = new HashMap<>();
         AtomicLong sum = new AtomicLong(0);
-        files.blockingIterable().forEach(file -> {
+        files.subscribe(file -> {
             savant.getLangByExtension(file.getFilename())
             .ifPresent(lang -> {
                 filesByLang.putIfAbsent(lang, new ArrayList<>());
@@ -39,7 +39,7 @@ public class LanguageStatisticsServiceImpl implements LanguageStatisticsService 
                                  .ratio(rate)
                                  .build());
         }
-        stats.sort(Comparator.comparing(GitHubStats::getRatio));
+        stats.sort(Comparator.comparing(GitHubStats::getRatio).reversed());
         return stats;
     }
 }
