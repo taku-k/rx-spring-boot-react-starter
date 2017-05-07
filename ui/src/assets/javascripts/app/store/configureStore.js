@@ -9,16 +9,19 @@ import rootEpic from '../epic';
 import DevTools from '../DevTools';
 
 export default function configureStore(history, initialState) {
-  const logger = createLogger();
-
   const epicMiddleware = createEpicMiddleware(rootEpic);
 
   const middlewares = [
     epicMiddleware,
     promiseMiddleware,
-    logger,
     routerMiddleware(history)
   ];
+
+  if (process.env.NODE_ENV !== `production`) {
+    const logger = createLogger();
+
+    middlewares.push(logger);
+  }
 
   const enhancer = compose(
     applyMiddleware(...middlewares),
